@@ -92,11 +92,10 @@ do_exit:
     # close file before exiting
     mv a0, s0
     call fclose
-    # exit program cleanly
-    li a0, 0
-    call exit
-    # restore and return (not actually reached)
+   # restore and return
     lw ra, 0(sp)
     addi sp, sp, 16
+    li a0, 0
     ret
+    
     
