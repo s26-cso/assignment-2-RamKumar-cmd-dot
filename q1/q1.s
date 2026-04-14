@@ -1,6 +1,3 @@
-.section .data
-node_size: .dword 24
-
 .section .text
 .globl make_node
 .globl insert
