@@ -1,0 +1,3 @@
+
+target_RamKumar-cmd-dot:     file format elf64-little
+
