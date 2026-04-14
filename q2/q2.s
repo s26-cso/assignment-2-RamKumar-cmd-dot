@@ -45,7 +45,7 @@ main:
 #  Step 1: fill array and initialize ans
 input_loop:
     # stop when i >= n
-    bge s2, s0, exit1
+    bge s2, s0, input_done
     # get argv[i+1] (skip argv[0])
     # each argv entry is 8 bytes → i*8 + 8
     slli t0, s2, 3
@@ -65,7 +65,7 @@ input_loop:
     sw t2, 0(t1)
     # move to next i
     addi s2, s2, 1
-    j loop1
+    j input_loop
 
 input_done:
     # reset i = 0 for main logic
@@ -74,11 +74,11 @@ input_done:
 # idea: use stack to store indices whose NGE is not found yet
 nge_outer_loop:
     # stop when i >= n
-    bge s2, s0, exit2
+    bge s2, s0, nge_done
 
 pop_stack_loop:
     # if stack empty → nothing to compare
-    blt s1, x0, exit3
+    blt s1, x0, stop_popping
     # load current element arr[i]
     slli t0, s2, 2
     add t0, s3, t0
@@ -93,7 +93,7 @@ pop_stack_loop:
     lw t4, 0(t4)
     # if arr[stack[top]] >= arr[i]
     # then current element is not greater → stop popping
-    bge t4, t1, exit3
+    bge t4, t1, stop_popping
     # otherwise arr[i] is next greater for stack[top]
     # so store index i in ans[stack[top]]
     slli t5, t3, 2
@@ -102,7 +102,7 @@ pop_stack_loop:
     # pop stack (top--)
     addi s1, s1, -1
     # continue popping until condition fails
-    j loop3
+    j pop_stack_loop
 
 stop_popping:
     # push current index i into stack
@@ -113,7 +113,7 @@ stop_popping:
     sw s2, 0(t0)
     # move to next i
     addi s2, s2, 1
-    j loop2
+    j nge_outer_loop
 
 nge_done:
     # reset i = 0 for printing
@@ -122,7 +122,7 @@ nge_done:
 # Step 3: print result
 print_loop:
     # stop when i >= n
-    bge s2, s0, exit4
+    bge s2, s0, print_done
     # load ans[i]
     slli t0, s2, 2
     add t0, s5, t0
@@ -133,7 +133,7 @@ print_loop:
     call printf
     # next i
     addi s2, s2, 1
-    j loop4
+    j print_loop
 
 print_done:
     # print newline
