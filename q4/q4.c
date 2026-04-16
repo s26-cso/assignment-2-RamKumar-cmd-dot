@@ -7,7 +7,7 @@ int main() {
     int num1, num2;
     while (scanf("%5s %d %d", op, &num1, &num2) == 3) {
         char libname[20];
-        sprintf(libname, "./%s.so", op);
+        sprintf(libname, "./lib%s.so", op);
         void *handle = dlopen(libname, RTLD_LAZY);
         if (!handle) {
             printf("Error loading %s\n", libname);
